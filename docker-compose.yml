@@ -22,9 +22,13 @@ services:
       - resume/docker.env
     volumes:
       - .:/srv/app
+      - ./static:/srv/app/static
+      - ./media:/srv/app/media
     ports:
       - "8000:8000"
-    command: gunicorn resume.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
+
+
 
 volumes:
   postgresql-data:

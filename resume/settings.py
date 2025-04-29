@@ -105,7 +105,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'resume/../static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'resume/../staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # --- Email ---
 EMAIL_CONFIG = env.email_url('EMAIL_URL')
