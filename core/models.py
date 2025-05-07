@@ -1,7 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-
 class AbstractModel(models.Model):
     updated_date = models.DateTimeField(
         blank=True,
@@ -15,8 +14,7 @@ class AbstractModel(models.Model):
     )
 
     class Meta:
-        abstract = True  # ✅ Burası doğru!
-
+        abstract = True
 
 class GeneralSetting(AbstractModel):
     name = models.CharField(
@@ -49,7 +47,6 @@ class GeneralSetting(AbstractModel):
         verbose_name_plural = 'General Settings'
         ordering = ('name',)
 
-
 class ImageSetting(AbstractModel):
     name = models.CharField(
         default='',
@@ -81,8 +78,6 @@ class ImageSetting(AbstractModel):
         verbose_name_plural = 'Image Settings'
         ordering = ('name',)
 
-
-# Skill modelini buraya ekledik
 class Skill(AbstractModel):
     order = models.IntegerField(
         default=0,
@@ -95,10 +90,16 @@ class Skill(AbstractModel):
         verbose_name='Name',
         help_text='This is variable of the setting.'
     )
-    percentage = models.IntegerField(
-        default=50,
-        validators=[MinValueValidator(50), MaxValueValidator(100)],
-        verbose_name='Percentage',
+    description = models.TextField(
+        default='',
+        blank=True,
+        verbose_name='Description',
+        help_text='Açıklama metni için.'
+    )
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Bootstrap ikon sınıfı (örneğin: bi-code-slash)"
     )
 
     def __str__(self):
@@ -108,7 +109,6 @@ class Skill(AbstractModel):
         verbose_name = 'Skill'
         verbose_name_plural = 'Skills'
         ordering = ('order',)
-
 
 class Experience(AbstractModel):
     company_name = models.CharField(
@@ -131,7 +131,6 @@ class Experience(AbstractModel):
     )
     start_date = models.DateField(
         verbose_name='Start Date',
-
     )
     end_date = models.DateField(
         default='None',
@@ -140,16 +139,13 @@ class Experience(AbstractModel):
         verbose_name='End Date',
     )
 
+    def __str__(self):
+        return f'Experience: {self.company_name}'
 
-def __str__(self):
-    return f'Experience: {self.company_name}'
-
-
-class Meta:
-    verbose_name = 'Experience'
-    verbose_name_plural = 'Experiences'
-    ordering = ('start_date',)
-
+    class Meta:
+        verbose_name = 'Experience'
+        verbose_name_plural = 'Experiences'
+        ordering = ('start_date',)
 
 class Education(AbstractModel):
     school_name = models.CharField(
@@ -172,7 +168,6 @@ class Education(AbstractModel):
     )
     start_date = models.DateField(
         verbose_name='Start Date',
-
     )
     end_date = models.DateField(
         default='None',
@@ -181,16 +176,13 @@ class Education(AbstractModel):
         verbose_name='End Date',
     )
 
+    def __str__(self):
+        return f'Education: {self.school_name}'
 
-def __str__(self):
-    return f'Experience: {self.school_name}'
-
-
-class Meta:
-    verbose_name = 'Education'
-    verbose_name_plural = 'Educations'
-    ordering = ('start_date',)
-
+    class Meta:
+        verbose_name = 'Education'
+        verbose_name_plural = 'Educations'
+        ordering = ('start_date',)
 
 class SocialMedia(AbstractModel):
     order = models.IntegerField(
@@ -210,16 +202,13 @@ class SocialMedia(AbstractModel):
         blank=True,
     )
 
+    def __str__(self):
+        return f'Social Media: {self.link}'
 
-def __str__(self):
-    return f'Social Media: {self.link}'
-
-
-class Meta:
-    verbose_name = 'Social Media'
-    verbose_name_plural = 'Social Media'
-    ordering = ('order',)
-
+    class Meta:
+        verbose_name = 'Social Media'
+        verbose_name_plural = 'Social Media'
+        ordering = ('order',)
 
 class Document(AbstractModel):
     order = models.IntegerField(
@@ -248,12 +237,10 @@ class Document(AbstractModel):
         upload_to='documents/',
     )
 
+    def __str__(self):
+        return f'Document: {self.slug}'
 
-def __str__(self):
-    return f'Document: {self.slug}'
-
-
-class Meta:
-    verbose_name = 'Document'
-    verbose_name_plural = 'Documents'
-    ordering = ('order',)
+    class Meta:
+        verbose_name = 'Document'
+        verbose_name_plural = 'Documents'
+        ordering = ('order',)

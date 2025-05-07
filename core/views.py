@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from core.models import GeneralSetting, ImageSetting, Skill, Experience, Education, SocialMedia, Document
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def get_general_setting(parameter):
-      try:
+    try:
         obj = GeneralSetting.objects.get(name=parameter).parameter
-      except:
-          obj = ''
-      return obj
-
+    except:
+        obj = ''
+    return obj
 
 def get_image_setting(parameter):
     try:
@@ -49,10 +51,8 @@ def layout(request):
     }
     return context
 
-
 def index(request):
     skills = Skill.objects.all()
-
     experiences = Experience.objects.all()
     educations = Education.objects.all()
 
@@ -61,9 +61,30 @@ def index(request):
         'experiences': experiences,
         'educations': educations,
     }
-    return render(request, 'index.html', context=context)  # ✅ Doğru girinti
-
+    return render(request, 'index.html', context=context)
 
 def redirect_urls(request, slug):
     doc = get_object_or_404(Document, slug=slug)
     return redirect(doc.file.url)
+
+class SkillListView(LoginRequiredMixin, ListView):
+    model = Skill
+    template_name = 'index.html'
+    context_object_name = 'skills'
+
+class SkillCreateView(LoginRequiredMixin, CreateView):
+    model = Skill
+    fields = ['order', 'name', 'description']
+    template_name = 'service-details.html'
+    success_url = reverse_lazy('skill_list')
+
+class SkillUpdateView(LoginRequiredMixin, UpdateView):
+    model = Skill
+    fields = ['order', 'name', 'description']
+    template_name = 'service-details.html'
+    success_url = reverse_lazy('skill_list')
+
+class SkillDeleteView(LoginRequiredMixin, DeleteView):
+    model = Skill
+    template_name = 'portfolio-details.html'
+    success_url = reverse_lazy('skill_list')
